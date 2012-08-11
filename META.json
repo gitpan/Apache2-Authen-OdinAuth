@@ -1,5 +1,5 @@
 {
-   "abstract" : "Single Sign-on system for Apache",
+   "abstract" : "A cookie-based single sign-on system for Apache",
    "author" : [
       "Maciej Pasternacki <maciej@pasternacki.net>"
    ],
@@ -36,7 +36,7 @@
    "provides" : {
       "Apache2::Authen::OdinAuth" : {
          "file" : "lib/Apache2/Authen/OdinAuth.pm",
-         "version" : "0.1"
+         "version" : "0.3"
       },
       "Crypt::OdinAuth" : {
          "file" : "lib/Crypt/OdinAuth.pm",
@@ -49,5 +49,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.1"
+   "version" : "0.3"
 }
