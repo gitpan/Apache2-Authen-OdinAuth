@@ -12,6 +12,7 @@ WriteMakefile
                    'Test::More' => 0,
                    'Digest::HMAC' => 0,
                    'Test::Exception' => 0,
+                   'MIME::Base64' => '3.13',
                    'YAML::XS' => 0,
                    'Digest::SHA256' => 0
                  }
