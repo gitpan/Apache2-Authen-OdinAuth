@@ -14,7 +14,7 @@ Version 0.5
 
 =cut
 
-our $VERSION = 0.5;
+our $VERSION = 0.6;
 
 use Crypt::OdinAuth;
 
@@ -22,6 +22,7 @@ use Apache2::Log;
 use Apache2::RequestRec ();
 use Apache2::RequestUtil;
 use Apache2::ServerUtil ();
+use Apache2::URI ();
 use Apache2::Connection;
 use Apache2::Const -compile => qw(OK REDIRECT REMOTE_NOLOOKUP FORBIDDEN);
 use APR::Table;
@@ -234,11 +235,11 @@ sub handler {
   #
 
   if (!$cookie) {
-    return &redir($r, $url, config->{need_auth_url});
+    return &redir($r, config->{need_auth_url});
   }
 
   if ($cookie_is_invalid) {
-    return &redir($r, $url, config->{invalid_cookie_url}, $cookie_is_invalid);
+    return &redir($r, config->{invalid_cookie_url}, $cookie_is_invalid);
   }
 
 
@@ -291,18 +292,17 @@ sub handler {
   # send the user to the not-on-list page
   #
 
-  return &redir($r, $url, config->{not_on_list_url});
+  return &redir($r, config->{not_on_list_url});
 }
 
 
 sub redir {
-  my ($r, $ref, $url, $reason) = @_;
+  my ($r, $target, $reason) = @_;
+  my $ref = &urlencode($r->construct_url($r->unparsed_uri));
+  $target .= ($target =~ /\?/) ? "&ref=$ref" : "?ref=$ref";
+  $target .= '&reason='.urlencode($reason) if $reason;
 
-  $ref = &urlencode('http://'.$ref);
-  $url .= ($url =~ /\?/) ? "&ref=$ref" : "?ref=$ref";
-  $url .= '&reason='.urlencode($reason) if $reason;
-
-  $r->headers_out->set('Location', $url);
+  $r->headers_out->set('Location', $target);
   return Apache2::Const::REDIRECT;
 }
 
